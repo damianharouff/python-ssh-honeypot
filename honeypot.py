@@ -6,7 +6,7 @@ import logging
 import graypy # apt install python3-graypy
 
 # generate key with 'ssh-keygen -t rsa -f server.key'
-HOST_KEY = paramiko.RSAKey(filename='server.key')
+HOST_KEY = paramiko.RSAKey(filename='/root/honeypot/server.key')
 SSH_PORT = 22
 GELF_UDP_HOST = 'collector.cekkent.net'
 GELF_UDP_PORT = 3849
@@ -22,7 +22,7 @@ class SSHServerHandler(paramiko.ServerInterface):
     def __init__(self):
         self.event = threading.Event()
     def check_auth_password(self, username, password):
-            print("New login: " + username + ":" + password)
+#            print("New login: " + username + ":" + password)
             return paramiko.AUTH_FAILED
 
 def handleConnection(client):

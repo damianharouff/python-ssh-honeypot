@@ -1,0 +1,9 @@
+[Unit]
+Description=Python SSH Honeypot script
+After=multi-user.target
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/python3 /root/honeypot/honeypot.py
+[Install]
+WantedBy=multi-user.target
