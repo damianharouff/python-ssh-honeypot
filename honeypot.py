@@ -8,8 +8,8 @@ import graypy # apt install python3-graypy
 # generate key with 'ssh-keygen -t rsa -f server.key'
 HOST_KEY = paramiko.RSAKey(filename='/root/honeypot/server.key')
 SSH_PORT = 22
-GELF_UDP_HOST = 'collector.cekkent.net'
-GELF_UDP_PORT = 3849
+GELF_UDP_HOST = 'localhost'
+GELF_UDP_PORT = 12201
 
 # =========================
 
