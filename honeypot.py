@@ -19,6 +19,11 @@ DEFAULTS = {
     'gelf_port': 12201,
 }
 
+# Limits
+MAX_CREDENTIAL_LENGTH = 200
+TRANSPORT_TIMEOUT = 30
+SSH_BANNER = 'SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.6'
+
 # Global flag for graceful shutdown
 shutdown_event = threading.Event()
 
@@ -74,8 +79,8 @@ class SSHServerHandler(paramiko.ServerInterface):
             extra={
                 'source_ip': self.client_addr[0],
                 'source_port': self.client_addr[1],
-                'username': username,
-                'password': password,
+                'username': username[:MAX_CREDENTIAL_LENGTH],
+                'password': password[:MAX_CREDENTIAL_LENGTH],
             }
         )
         return paramiko.AUTH_FAILED
@@ -86,7 +91,9 @@ def handle_connection(client_socket, client_addr, host_key, logger):
     transport = None
     try:
         transport = paramiko.Transport(client_socket)
+        transport.local_version = SSH_BANNER
         transport.add_server_key(host_key)
+        transport.set_keepalive(TRANSPORT_TIMEOUT)
         server_handler = SSHServerHandler(client_addr, logger)
         transport.start_server(server=server_handler)
 
@@ -155,11 +162,11 @@ def main():
     # Command-line arguments override config file
     if args.key:
         config['key_path'] = args.key
-    if args.port:
+    if args.port is not None:
         config['ssh_port'] = args.port
     if args.gelf_host:
         config['gelf_host'] = args.gelf_host
-    if args.gelf_port:
+    if args.gelf_port is not None:
         config['gelf_port'] = args.gelf_port
 
     # Setup signal handlers for graceful shutdown

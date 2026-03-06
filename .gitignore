@@ -1,2 +1,5 @@
 server.key
 server.key.pub
+config.json
+__pycache__/
+*.pyc
