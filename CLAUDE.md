@@ -9,8 +9,8 @@ This is a simple SSH honeypot that logs connection attempts and credential attem
 ## Dependencies
 
 - Python 3
-- paramiko (`apt install python3-paramiko`)
-- graypy (`apt install python3-graypy`)
+- paramiko (installed via venv)
+- graypy (installed via venv; `python3-graypy` was removed in Debian 12+)
 
 ## Configuration
 
@@ -38,6 +38,11 @@ cp honeypot.py /opt/honeypot/
 cp config.json.example /opt/honeypot/config.json
 # Edit config.json with your settings
 ssh-keygen -t rsa -f /opt/honeypot/server.key -N ''
+
+# Create venv and install dependencies
+python3 -m venv /opt/honeypot/venv
+/opt/honeypot/venv/bin/pip install paramiko graypy
+
 chown -R honeypot:honeypot /opt/honeypot
 chmod 600 /opt/honeypot/server.key
 

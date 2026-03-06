@@ -16,9 +16,7 @@ A lightweight SSH honeypot that logs connection attempts and credentials to Gray
 - paramiko
 - graypy
 
-```bash
-apt install python3-paramiko python3-graypy
-```
+Dependencies are installed via a Python venv (see Deployment below). The `python3-graypy` Debian package is no longer available in Debian 12+.
 
 ## Configuration
 
@@ -63,13 +61,20 @@ sudo cp honeypot.py /opt/honeypot/
 sudo cp config.json.example /opt/honeypot/config.json
 ```
 
-### 3. Generate SSH Host Key
+### 3. Create Venv and Install Dependencies
+
+```bash
+sudo python3 -m venv /opt/honeypot/venv
+sudo /opt/honeypot/venv/bin/pip install paramiko graypy
+```
+
+### 4. Generate SSH Host Key
 
 ```bash
 sudo ssh-keygen -t rsa -f /opt/honeypot/server.key -N ''
 ```
 
-### 4. Configure
+### 5. Configure
 
 Edit `/opt/honeypot/config.json` with your Graylog server:
 
@@ -86,7 +91,7 @@ sudo nano /opt/honeypot/config.json
 }
 ```
 
-### 5. Set Permissions
+### 6. Set Permissions
 
 ```bash
 sudo chown -R honeypot:honeypot /opt/honeypot
@@ -94,7 +99,7 @@ sudo chmod 600 /opt/honeypot/server.key
 sudo chmod 600 /opt/honeypot/config.json
 ```
 
-### 6. Install Systemd Service
+### 7. Install Systemd Service
 
 ```bash
 sudo cp honeypotpy.service /etc/systemd/system/
@@ -103,7 +108,7 @@ sudo systemctl enable honeypotpy
 sudo systemctl start honeypotpy
 ```
 
-### 7. Verify
+### 8. Verify
 
 ```bash
 sudo systemctl status honeypotpy

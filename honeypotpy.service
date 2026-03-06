@@ -5,7 +5,7 @@ Wants=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /opt/honeypot/honeypot.py
+ExecStart=/opt/honeypot/venv/bin/python3 /opt/honeypot/honeypot.py
 WorkingDirectory=/opt/honeypot
 Restart=always
 RestartSec=5
